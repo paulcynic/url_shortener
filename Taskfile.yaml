@@ -1,0 +1,9 @@
+# See: https://taskfile.dev/api/
+
+version: "3"
+
+tasks:
+  url:
+    cmds:
+      - ENV="local" CONFIG_PATH="./config/local.yaml" go run ./cmd/url-shortener --config=./config/local.yaml
+      # export HTTP_SERVER_PASSWORD="changeit"
