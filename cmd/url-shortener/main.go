@@ -13,6 +13,7 @@ import (
 	"url-shortener/internal/http-server/handlers/url/save"
 	"url-shortener/internal/lib/logger/handlers/slogpretty"
 	"url-shortener/internal/lib/logger/sl"
+	"url-shortener/internal/services/eventsender"
 	"url-shortener/internal/storage/sqlite"
 
 	ssogrpc "url-shortener/internal/clients/sso/grpc"
@@ -94,6 +95,9 @@ func main() {
 		WriteTimeout: cfg.HTTPServer.Timeout,
 		IdleTimeout:  cfg.HTTPServer.IdleTimeout,
 	}
+
+	sender := eventsender.New(storage, log)
+	sender.StartProcessingEvents(context.Background(), 5*time.Second)
 
 	go func() {
 		if err := srv.ListenAndServe(); err != nil {
